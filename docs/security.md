@@ -36,6 +36,16 @@ A public site could still redirect the checker to a private address. `TimedUptim
 - A redirect to a private address stops the request before it is sent. The check fails with the reason "Unsafe redirect blocked".
 - Ordinary redirects, such as `http` to `https`, are still followed.
 
+## Monitoring internal services
+
+Both guards are on by default. If you monitor services on your own network, turn them off in `config/vitals.php`:
+
+```php
+'allow_private_addresses' => true,
+```
+
+or with `VITALS_ALLOW_PRIVATE_ADDRESSES=true`. The add and edit forms then accept private addresses, and checks follow redirects with Guzzle's defaults, as Spatie's own request does. Anyone who can add or edit a monitor can then make your server request internal addresses, so limit that with the [policy](authorization.md) first. `vitals:doctor` warns while the setting is on.
+
 ## What is stored
 
 - Failure reasons are the messages Guzzle and Spatie produce, cut to 255 characters. They may contain the monitored URL.

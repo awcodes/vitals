@@ -71,6 +71,8 @@ return [
 
 - `monitor_model` is required. Vitals records checks, opens and closes incidents, and blocks checks for paused monitors from its `Monitor` model, which extends Spatie's.
 - `send_uptime_check_request` is required. It records each check's HTTP status and response time, and stops redirects to private network addresses.
+
+Both can be subclasses, if your application already customises Spatie's model or request action. See [Upgrading](upgrading.md#from-a-custom-monitoring-page).
 - `resend_uptime_check_failed_notification_every_minutes` is recommended. Spatie's default re-sends a failure notification every 60 minutes during an outage.
 
 ## Register the plugin

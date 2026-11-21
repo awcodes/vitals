@@ -60,7 +60,7 @@ final readonly class RecordUptimeCheckAction
     private function syncIncident(Monitor $monitor, MonitorCheck $check): bool
     {
         $openIncident = MonitorIncident::query()
-            ->whereBelongsTo($monitor)
+            ->whereBelongsTo($monitor, 'monitor')
             ->open()
             ->latest('started_at')
             ->first();

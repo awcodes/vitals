@@ -62,7 +62,7 @@ final readonly class MonitorInspection
         $lastSuccess = $monitor->checks()->where('succeeded', true)->latest('checked_at')->first();
         $recent = $monitor->checks()->latest('checked_at')->limit(self::RECENT_CHECKS)->get()->reverse()->values();
         $incidents = MonitorIncident::query()
-            ->whereBelongsTo($monitor)
+            ->whereBelongsTo($monitor, 'monitor')
             ->orderByRaw('resolved_at is null desc')
             ->latest('started_at')
             ->limit(10)

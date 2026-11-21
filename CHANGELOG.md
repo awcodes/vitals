@@ -29,3 +29,7 @@ All notable changes to `awcodes/vitals` are documented in this file.
   panel themes.
 - `Vitals::schedule()`, which registers the four scheduled commands.
 - Documentation in `docs/`.
+- `Monitor` and `TimedUptimeCheckRequest` can be extended, for apps that already
+  customise Spatie's monitor model or request action.
+- `vitals.allow_private_addresses` lets apps that monitor internal services
+  turn off the private-address guards.

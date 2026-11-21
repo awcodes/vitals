@@ -42,6 +42,15 @@ return [
     'attention_limit' => 5,
 
     /*
+     * Whether monitors may point at loopback, private, link-local or reserved
+     * addresses. Off by default: the add and edit forms refuse such URLs, and
+     * every check refuses to follow a redirect to one, so the checker can't be
+     * aimed at services on your own network. Turn it on only if you monitor
+     * internal services and trust everyone who can manage monitors.
+     */
+    'allow_private_addresses' => (bool) env('VITALS_ALLOW_PRIVATE_ADDRESSES', false),
+
+    /*
      * The policy registered for the Monitor model, unless the application
      * has already registered its own.
      */

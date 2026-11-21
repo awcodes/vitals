@@ -11,7 +11,7 @@ Applications that already run `spatie/laravel-uptime-monitor` usually have a `mo
 
 1. **Install the package** as described in [Installation](installation.md). `vitals:install` leaves your existing `config/uptime-monitor.php` and `create_monitors_table` migration alone.
 2. **Run the migrations.** They only add what is missing: any of the five monitor columns (`name`, `server_url`, `paused_at`, `paused_until`, `pause_reason`) and any of the three history tables. Existing monitors keep their current state.
-3. **Point Spatie at Vitals** by setting `monitor_model` and `actions.send_uptime_check_request` in `config/uptime-monitor.php`, replacing your own classes. The Vitals model is final, so behaviour your own model added has to live elsewhere; relations can be attached with Eloquent's `Monitor::resolveRelationUsing()`.
+3. **Point Spatie at Vitals** by setting `monitor_model` and `actions.send_uptime_check_request` in `config/uptime-monitor.php`. If you already customised either, keep your class and change its parent instead: extend `Awcodes\Vitals\Models\Monitor` and `Awcodes\Vitals\Support\TimedUptimeCheckRequest`, and call the parent from any method you override. `vitals:doctor` accepts subclasses of both.
 4. **Replace your schedule entries** for `monitor:check-uptime` and `monitor:check-certificate` with `Vitals::schedule()`, or keep your own entries and add the two Vitals commands. See [Scheduling](scheduling.md). Make sure each check is scheduled only once.
 5. **Register the plugin and add the theme `@source` line**, then remove your old page, widget and their tests.
 6. **Run `php artisan vitals:doctor`** to confirm the setup.
