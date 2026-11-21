@@ -54,7 +54,9 @@ final class VitalsAlertsWidget extends Widget
             ->orderBy('name')
             ->get()
             ->map(fn (Monitor $site): array => [
-                'name' => $site->name,
+                // Same fallback as the page's attention list, for monitors added
+                // outside Vitals without a name.
+                'name' => filled($site->name) ? $site->name : (string) $site->url?->getHost(),
                 'url' => $site->raw_url,
                 'uptimeFailing' => $site->uptime_status === UptimeStatus::DOWN,
                 'certificateFailing' => $site->certificate_status === CertificateStatus::INVALID,
