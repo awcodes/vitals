@@ -1,0 +1,18 @@
+version: 1
+
+title: Vitals
+
+navigation:
+  - index
+  - installation
+  - configuration
+  - usage
+  - authorization
+
+  - label: Operations
+    children:
+      - scheduling
+      - retention
+      - security
+
+  - upgrading
