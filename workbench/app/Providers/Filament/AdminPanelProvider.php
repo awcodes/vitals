@@ -31,6 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login(Login::class)
+            ->sidebarCollapsibleOnDesktop()
             ->plugin(VitalsPlugin::make())
             ->theme(Theme::make('workbench')->html(
                 fn (): string => route('workbench.theme'),
