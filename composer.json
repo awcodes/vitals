@@ -44,7 +44,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Awcodes\\Vitals\\": "src/"
+            "Awcodes\\Vitals\\": "src/",
+            "Awcodes\\Vitals\\Database\\Factories\\": "database/factories/",
+            "Awcodes\\Vitals\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
