@@ -14,3 +14,12 @@ All notable changes to `awcodes/vitals` are documented in this file.
   own; swap it with `vitals.policy`.
 - `config/vitals.php`, including a display `timezone` setting.
 - `VitalsDemoSeeder` for local development.
+- The Vitals page: summary strip, attention list, monitor table with 30-day
+  history, inspection slide-over, and add, edit, pause, resume, check and
+  delete actions, each authorized through `MonitorPolicy`.
+- `VitalsAlertsWidget` for the dashboard.
+- `VitalsPlugin` with `navigationLabel()`, `navigationIcon()`,
+  `navigationGroup()`, `navigationSort()`, `slug()`, `timezone()` and
+  `alertsWidget()`.
+- The `vitals-heartbeat` icon and a small stylesheet registered as a Filament
+  asset.

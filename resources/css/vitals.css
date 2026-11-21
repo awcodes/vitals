@@ -1,0 +1,17 @@
+/*
+ * Layout adjustments Tailwind utilities can't reach, because they target
+ * Filament's own table and section markup. Plain CSS, so it works without
+ * the consuming theme compiling it.
+ */
+.vitals-table .fi-ta-col > .fi-ta-text:not(.fi-inline) {
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+}
+
+.vitals-inspect .fi-section-not-contained > header {
+    padding: 0 0 0.25rem;
+}
+
+.vitals-inspect .fi-section-not-contained > .fi-section-content-ctn > .fi-section-content {
+    padding: 0;
+}

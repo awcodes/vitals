@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 use Awcodes\Vitals\Database\Seeders\VitalsDemoSeeder;
 use Awcodes\Vitals\Enums\CertificateHealth;
+use Awcodes\Vitals\Filament\Pages\VitalsPage;
 use Awcodes\Vitals\Models\Monitor;
 use Awcodes\Vitals\Models\MonitorCheck;
 use Awcodes\Vitals\Models\MonitorIncident;
 use Awcodes\Vitals\Support\UptimeHistory;
+use Filament\Actions\Testing\TestAction;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Notification;
+use Workbench\App\Models\User;
+
+use function Pest\Livewire\livewire;
 
 beforeEach(function (): void {
     Date::setTestNow('2026-11-21 12:00:00');
@@ -145,4 +150,80 @@ it('derives incidents from the history, closing resolved ones', function (): voi
         ->and(MonitorIncident::query()->whereBelongsTo($monitors['Recovered Bookings'])->open()->count())->toBe(0)
         ->and(MonitorIncident::query()->whereBelongsTo($monitors['Recovered Bookings'])->count())->toBe(1)
         ->and(MonitorIncident::query()->whereBelongsTo($monitors['Wobbly Checkout'])->count())->toBe(0);
+});
+describe('page with demo monitors', function (): void {
+    beforeEach(function (): void {
+        $this->actingAs(User::factory()->create());
+        seedDemoMonitors();
+    });
+
+    it('derives the summary counts', function (): void {
+        livewire(VitalsPage::class)->assertSeeInOrder([
+            'All', '18', 'Healthy', '11', 'Down or degraded', '4', 'Unknown', '2', 'Paused', '1', 'SSL issues', '5',
+        ]);
+    });
+
+    it('orders down, degraded, certificate problems, unknown, healthy, paused', function (): void {
+        $page = livewire(VitalsPage::class)->instance();
+
+        if (! $page instanceof VitalsPage) {
+            throw new UnexpectedValueException('Expected the Vitals page.');
+        }
+
+        $names = $page->getTableRecords()->pluck('name')->all();
+
+        expect(array_slice($names, 0, 4))->toBe(['Outage API', 'Troubled Coffee Shop', 'Sluggish Reports', 'Wobbly Checkout'])
+            ->and(array_slice($names, 4, 4))->toBe(['Expired Travel', 'Mismatched CDN', 'Unreadable Certificate Blog', 'Expiring Portal'])
+            ->and(array_slice($names, 8, 2))->toBe(['Brand New Landing', 'Forgotten Wiki'])
+            ->and(end($names))->toBe('Paused Intranet');
+    });
+
+    it('filters through the quick filters', function (): void {
+        livewire(VitalsPage::class)
+            ->call('filterMonitorsByState', 'issues')
+            ->assertCountTableRecords(4)
+            ->call('filterMonitorsByState', 'issues')
+            ->call('filterMonitorsByCertificate')
+            ->assertCountTableRecords(5);
+    });
+
+    it('inspects each kind of monitor', function (string $name, array $expected): void {
+        $record = Monitor::query()->where('name', $name)->sole();
+
+        livewire(VitalsPage::class)
+            ->mountAction(TestAction::make('inspect')->table($record))
+            ->assertMountedActionModalSee([$name, ...$expected]);
+    })->with([
+        'healthy' => ['Steady Storefront', ['Healthy', 'Responding normally', 'Valid · 120 days remaining', 'No incidents recorded.']],
+        'active outage' => ['Outage API', ['Down', '4 consecutive failed checks', 'Outage ongoing since', 'Timed out', 'The website did not respond in time.', 'Ongoing', 'cURL error 28']],
+        'degraded performance' => ['Sluggish Reports', ['Degraded', 'Responding slowly', 'slow above 3,000 ms']],
+        'intermittent' => ['Flaky Status Page', ['Responding normally', 'Server error (504 Gateway Timeout)', 'Resolved']],
+        'recently recovered' => ['Recovered Bookings', ['Responding normally', 'Server error (503 Service Unavailable)', 'Resolved']],
+        'expiring certificate' => ['Expiring Portal', ['Healthy', 'SSL expiring', 'Expires in 6 days']],
+        'expired certificate' => ['Expired Travel', ['Healthy', 'SSL expired', 'Expired 3 days ago', 'The certificate has expired']],
+        'invalid certificate' => ['Mismatched CDN', ['SSL invalid', 'Hostname mismatch', 'The certificate does not cover this domain.', 'edge-cache.test']],
+        'certificate inspection failed' => ['Unreadable Certificate Blog', ['SSL check failed', 'Certificate inspection failed', 'its expiry is unknown']],
+        'never checked' => ['Brand New Landing', ['Never checked', 'Waiting for the first check', 'No monitoring history recorded yet.', 'Not checked yet']],
+        'stale' => ['Forgotten Wiki', ['Stale', 'No check for 6 hours, so this status may be out of date']],
+        'paused' => ['Paused Intranet', ['Paused', 'Monitoring paused 4 days ago', 'Migrating to a new host']],
+        'partial history' => ['Fresh Microsite', ['Responding normally', 'Daily average response']],
+        'no history' => ['Legacy Forum', ['Healthy', 'No monitoring history recorded yet.']],
+        'multiple issues' => ['Troubled Coffee Shop', ['Down', 'SSL expired', '3 consecutive failed checks', 'Connection failed', 'The website could not be reached.', 'Expired 10 days ago', 'cURL error 7']],
+    ]);
+
+    it('does not present a failed certificate inspection as expired', function (): void {
+        $record = Monitor::query()->where('name', 'Unreadable Certificate Blog')->sole();
+
+        livewire(VitalsPage::class)
+            ->mountAction(TestAction::make('inspect')->table($record))
+            ->assertMountedActionModalDontSee(['Expired', 'Expires']);
+    });
+
+    it('shows a failed latest check instead of an old response time', function (): void {
+        $record = Monitor::query()->where('name', 'Outage API')->sole();
+
+        livewire(VitalsPage::class)
+            ->mountAction(TestAction::make('inspect')->table($record))
+            ->assertMountedActionModalSee(['Latest response', 'Failed', 'Last success']);
+    });
 });
