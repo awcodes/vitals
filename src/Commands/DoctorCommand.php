@@ -70,6 +70,13 @@ final class DoctorCommand extends Command
             "Recommended: set 'notifications.resend_uptime_check_failed_notification_every_minutes' => 0",
             required: false,
         );
+
+        $this->report(
+            ! config('vitals.allow_private_addresses'),
+            'Monitors and redirects to private network addresses are blocked',
+            'vitals.allow_private_addresses is on: monitors and redirects may reach private network addresses',
+            required: false,
+        );
     }
 
     private function checkSchema(): void

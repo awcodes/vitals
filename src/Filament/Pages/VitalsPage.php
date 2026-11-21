@@ -555,7 +555,7 @@ final class VitalsPage extends Page implements HasActions, HasSchemas, HasTable
                 ->label('Site URL')
                 ->required()
                 ->url()
-                ->rule(new PublicHost)
+                ->rule(new PublicHost, condition: fn (): bool => ! config('vitals.allow_private_addresses'))
                 ->rule(fn (): Closure => function (string $attribute, mixed $value, Closure $fail) use ($record): void {
                     $alreadyMonitored = Monitor::query()
                         ->where('url', rtrim((string) $value, '/'))

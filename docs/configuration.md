@@ -18,13 +18,14 @@ Vitals reads settings from three places: `config/vitals.php`, the plugin's optio
 | `slow_response_ms` | `3000` | The latest response time above which an otherwise passing monitor shows as Degraded. |
 | `history_days` | `30` | The number of days in the history strip and the uptime percentage. |
 | `attention_limit` | `5` | The most monitors listed under **Needs attention** before "View all" appears. |
+| `allow_private_addresses` | `false` | Whether monitors may point at private network addresses. See [Security](security.md#monitoring-internal-services). |
 | `policy` | `MonitorPolicy::class` | The policy registered for the `Monitor` model. See [Authorization](authorization.md). |
 | `retention.enabled` | `true` | Whether `monitors:prune-history` prunes anything. |
 | `retention.checks_days` | `30` | Completed days of raw checks to keep. |
 | `retention.daily_stats_days` | `365` | Days of daily summaries to keep. |
 | `retention.resolved_incidents_days` | `365` | Days to keep an incident after it is resolved. |
 
-The retention keys can also be set from the environment with `VITALS_PRUNING_ENABLED`, `VITALS_CHECK_RETENTION_DAYS`, `VITALS_DAILY_STATS_RETENTION_DAYS` and `VITALS_INCIDENT_RETENTION_DAYS`. [Retention](retention.md) explains how they work together.
+`allow_private_addresses` can be set with `VITALS_ALLOW_PRIVATE_ADDRESSES`. The retention keys can also be set from the environment with `VITALS_PRUNING_ENABLED`, `VITALS_CHECK_RETENTION_DAYS`, `VITALS_DAILY_STATS_RETENTION_DAYS` and `VITALS_INCIDENT_RETENTION_DAYS`. [Retention](retention.md) explains how they work together.
 
 ## Plugin options
 

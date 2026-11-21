@@ -14,6 +14,12 @@ arch('env() is only read from config files')
     ->expect('Awcodes\Vitals')
     ->not->toUse('env');
 
-arch('models are final')
-    ->expect('Awcodes\Vitals\Models')
+arch('history models are final')
+    ->expect(['Awcodes\Vitals\Models\MonitorCheck', 'Awcodes\Vitals\Models\MonitorIncident', 'Awcodes\Vitals\Models\MonitorDailyStat'])
     ->toBeFinal();
+
+// Monitor and TimedUptimeCheckRequest stay open: apps that already customise
+// Spatie's monitor model or request action extend them instead.
+arch('the Spatie extension points can be extended')
+    ->expect(['Awcodes\Vitals\Models\Monitor', 'Awcodes\Vitals\Support\TimedUptimeCheckRequest'])
+    ->not->toBeFinal();

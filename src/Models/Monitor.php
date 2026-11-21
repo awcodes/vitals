@@ -53,27 +53,30 @@ use Spatie\Url\Url;
  * @property ?string $pause_reason
  * @property-read ?MonitorCheck $latestCheck
  */
-final class Monitor extends BaseMonitor
+class Monitor extends BaseMonitor
 {
     /** @use HasFactory<MonitorFactory> */
     use HasFactory;
 
+    // Keys are named explicitly: Eloquent would otherwise derive them from the
+    // class name, which breaks for an app subclass such as AppMonitor.
+
     /** @return HasMany<MonitorCheck, $this> */
     public function checks(): HasMany
     {
-        return $this->hasMany(MonitorCheck::class);
+        return $this->hasMany(MonitorCheck::class, 'monitor_id');
     }
 
     /** @return HasOne<MonitorCheck, $this> */
     public function latestCheck(): HasOne
     {
-        return $this->hasOne(MonitorCheck::class)->latestOfMany('checked_at');
+        return $this->hasOne(MonitorCheck::class, 'monitor_id')->latestOfMany('checked_at');
     }
 
     /** @return HasMany<MonitorIncident, $this> */
     public function incidents(): HasMany
     {
-        return $this->hasMany(MonitorIncident::class);
+        return $this->hasMany(MonitorIncident::class, 'monitor_id');
     }
 
     public function isPaused(): bool
@@ -360,7 +363,7 @@ final class Monitor extends BaseMonitor
     }
 
     /** @return array{priority: int, message: string, color: string}|null */
-    private function uptimeIssue(): ?array
+    protected function uptimeIssue(): ?array
     {
         return match ($this->health()) {
             MonitorHealth::Down => ['priority' => 1, 'message' => "Down · {$this->uptime_check_times_failed_in_a_row} failed checks in a row", 'color' => 'danger'],
@@ -375,7 +378,7 @@ final class Monitor extends BaseMonitor
     }
 
     /** @return array{priority: int, message: string, color: string}|null */
-    private function certificateIssue(): ?array
+    protected function certificateIssue(): ?array
     {
         $daysRemaining = $this->certificateDaysRemaining();
 
