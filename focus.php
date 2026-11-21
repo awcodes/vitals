@@ -18,12 +18,12 @@ use Awcodes\Focus\ScreenshotSuite;
 $firstIssue = '[wire\:key^="monitor-issue-"]:first-child > button';
 
 // The awcodes card templates frame each screenshot at 1400x816. Card sources are
-// captured in that shape at three quarters and half size, and the templates
-// scale them up.
-$cardPage = [1050, 612];
-// The slide-over is 42rem (672px) wide, so its card source is captured at that
-// width and fills the frame edge to edge.
-$cardInspect = [672, 392];
+// captured in that shape, larger than the frame so more of the page fits, and
+// the templates scale them down. The sidebar is collapsed so the table runs
+// the full width.
+$cardPage = [1600, 933];
+$cardInspect = [1250, 729];
+$collapseSidebar = '.fi-topbar-close-collapse-sidebar-btn';
 
 return ScreenshotSuite::make()
     ->screenshots([
@@ -47,15 +47,18 @@ return ScreenshotSuite::make()
         // two-up templates show slot 1 dark, small and in front at the lower left,
         // and slot 2 light as the large screenshot at the back on the right. The
         // page is the main subject, so it takes the large slot and the slide-over
-        // the small one; both are captured in both themes.
+        // the small one, open over the page so it reads in context. Both are captured
+        // in both themes.
         Screenshot::make('card-page')
             ->viewportSize(...$cardPage)
             ->visit('/admin/vitals')
+            ->click($collapseSidebar)
             ->viewport(),
 
         Screenshot::make('card-inspect')
             ->viewportSize(...$cardInspect)
             ->visit('/admin/vitals')
+            ->click($collapseSidebar)
             ->click($firstIssue)
             ->waitFor('.vitals-inspect')
             ->viewport(),
