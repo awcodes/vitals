@@ -23,3 +23,9 @@ All notable changes to `awcodes/vitals` are documented in this file.
   `alertsWidget()`.
 - The `vitals-heartbeat` icon and a small stylesheet registered as a Filament
   asset.
+- `vitals:install`, which also publishes the uptime-monitor config and
+  migration when the app has not yet, and prints the settings to change.
+- `vitals:doctor`, a read-only check of the uptime-monitor settings, tables and
+  panel themes.
+- `Vitals::schedule()`, which registers the four scheduled commands.
+- Documentation in `docs/`.

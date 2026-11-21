@@ -70,3 +70,11 @@ it('refreshes when sites are updated elsewhere', function (): void {
     $component->dispatch(VitalsAlertsWidget::REFRESH_EVENT)
         ->assertSee('Late Failure');
 });
+
+it('shows the host for a failing monitor without a name', function (): void {
+    Monitor::factory()->down('Connection refused')->create(['name' => null, 'url' => 'https://unnamed.example.com']);
+
+    Livewire::test(VitalsAlertsWidget::class)
+        ->assertSet('failingSites.0.name', 'unnamed.example.com')
+        ->assertSee('Connection refused');
+});
