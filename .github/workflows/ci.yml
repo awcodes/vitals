@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - "config/**"
+      - "database/**"
+      - "resources/**"
+      - "routes/**"
+      - "tests/**"
+      # workbench/ is a tracked Testbench app that rector and phpstan analyse
+      # (.github#6), so a workbench-only commit must trigger CI. Without this it
+      # lands on the active branch unchecked and then fails the NEXT unrelated PR.
+      - "workbench/**"
+      - "composer.json"
+      - "composer.lock"
+      - "package.json"
+      - "package-lock.json"
+      - "vite.config.*"
+      - "phpunit.xml*"
+      - "phpstan.neon*"
+      - "rector.php"
+      - "pint.json"
+      - "testbench.yaml"
+      - ".github/workflows/**"
+      # The ruleset requires `All Checks`, so a change that runs no CI cannot
+      # merge without an admin override. A Dependabot config change is one.
+      - ".github/dependabot.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - "config/**"
+      - "database/**"
+      - "resources/**"
+      - "routes/**"
+      - "tests/**"
+      # workbench/ is a tracked Testbench app that rector and phpstan analyse
+      # (.github#6), so a workbench-only commit must trigger CI. Without this it
+      # lands on the active branch unchecked and then fails the NEXT unrelated PR.
+      - "workbench/**"
+      - "composer.json"
+      - "composer.lock"
+      - "package.json"
+      - "package-lock.json"
+      - "vite.config.*"
+      - "phpunit.xml*"
+      - "phpstan.neon*"
+      - "rector.php"
+      - "pint.json"
+      - "testbench.yaml"
+      - ".github/workflows/**"
+      # The ruleset requires `All Checks`, so a change that runs no CI cannot
+      # merge without an admin override. A Dependabot config change is one.
+      - ".github/dependabot.yml"
+
+jobs:
+  ci:
+    uses: awcodes/.github/.github/workflows/filament-plugin.yml@ad63f1536b965fed92274516cb81f172b1d60e1a # v1.4.3
+    with:
+      # The fleet's seven Filament plugin rows, plus the two platform-baseline
+      # additions: Filament 4 on Laravel 13, and a prefer-lowest floor row.
+      matrix: |
+        [
+          {"php":"8.5","laravel":"13.*","filament":"5.*","testbench":"11.*","dependencies":"prefer-stable"},
+          {"php":"8.4","laravel":"13.*","filament":"5.*","testbench":"11.*","dependencies":"prefer-stable"},
+          {"php":"8.5","laravel":"12.*","filament":"5.*","testbench":"10.*","dependencies":"prefer-stable"},
+          {"php":"8.4","laravel":"12.*","filament":"5.*","testbench":"10.*","dependencies":"prefer-stable"},
+          {"php":"8.3","laravel":"12.*","filament":"5.*","testbench":"10.*","dependencies":"prefer-stable"},
+          {"php":"8.5","laravel":"13.*","filament":"4.*","testbench":"11.*","dependencies":"prefer-stable"},
+          {"php":"8.4","laravel":"12.*","filament":"4.*","testbench":"10.*","dependencies":"prefer-stable"},
+          {"php":"8.3","laravel":"12.*","filament":"4.*","testbench":"10.*","dependencies":"prefer-stable"},
+          {"php":"8.3","laravel":"12.*","filament":"4.*","testbench":"10.*","dependencies":"prefer-lowest"}
+        ]
+      run-tests: true
+      run-lint: true
+      run-static-analysis: true
+      run-reformat: true
+      run-build: false
