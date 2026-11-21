@@ -1,6 +1,11 @@
 laravel: '@testbench'
 
 providers:
+  # Listed even though package discovery also registers it: Larastan boots
+  # Testbench without the discovery cache, and needs the vitals:: view
+  # namespace to check view names. Laravel registers a provider only once.
+  - Awcodes\Vitals\VitalsServiceProvider
+  - Workbench\App\Providers\WorkbenchServiceProvider
   - Workbench\App\Providers\Filament\AdminPanelProvider
 
 migrations:
@@ -11,7 +16,19 @@ seeders:
 
 env:
   - APP_NAME='Vitals Workbench'
+  # VitalsDemoSeeder only seeds in the local environment.
+  - APP_ENV=local
   - AUTH_MODEL='Workbench\App\Models\User'
+
+# Migrations materialized into the skeleton by the publish step below.
+# `composer build` purges them in a separate process first: package-tools picks
+# migration filenames when it boots, so purging inside workbench:build would
+# reuse the old, earlier timestamps and sort them before create_monitors_table.
+purge:
+  files:
+    - database/migrations/*_create_monitors_table.php
+    - database/migrations/*_add_vitals_columns_to_monitors_table.php
+    - database/migrations/*_create_vitals_monitor_*_table.php
 
 workbench:
   start: '/admin'
@@ -27,6 +44,12 @@ workbench:
   build:
     - asset-publish
     - filament-assets
+    # One step: the build keys steps by name, so a second vendor-publish would
+    # replace the first. "migrations" is spatie/laravel-uptime-monitor's tag.
+    - vendor-publish:
+        --tag:
+          - migrations
+          - vitals-migrations
     - create-sqlite-db
     - db-wipe
     - migrate-fresh

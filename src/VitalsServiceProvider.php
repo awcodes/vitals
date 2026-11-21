@@ -8,6 +8,9 @@ use Awcodes\Vitals\Commands\PruneMonitoringHistoryCommand;
 use Awcodes\Vitals\Commands\ResumeExpiredMonitorPausesCommand;
 use Awcodes\Vitals\Models\Monitor;
 use Awcodes\Vitals\Support\UptimeCheckTimings;
+use BladeUI\Icons\Factory as IconFactory;
+use Filament\Support\Assets\Css;
+use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Support\Facades\Gate;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -35,6 +38,7 @@ class VitalsServiceProvider extends PackageServiceProvider
         $package
             ->name(static::$name)
             ->hasConfigFile()
+            ->hasViews()
             ->hasMigrations(self::MIGRATIONS)
             ->hasCommands([
                 PruneMonitoringHistoryCommand::class,
@@ -47,10 +51,21 @@ class VitalsServiceProvider extends PackageServiceProvider
         // Transfer stats travel from the uptime request to the check recorder
         // within one check run, so they must not outlive it.
         $this->app->scoped(UptimeCheckTimings::class);
+
+        $this->callAfterResolving(IconFactory::class, function (IconFactory $icons): void {
+            $icons->add('vitals', [
+                'path' => __DIR__ . '/../resources/svg',
+                'prefix' => 'vitals',
+            ]);
+        });
     }
 
     public function packageBooted(): void
     {
+        FilamentAsset::register([
+            Css::make('vitals', __DIR__ . '/../resources/css/vitals.css'),
+        ], 'awcodes/vitals');
+
         $this->registerPolicy();
     }
 

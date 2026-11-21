@@ -89,8 +89,14 @@ abstract class TestCase extends BaseTestCase
         $app['config']->set('mail.default', 'array');
     }
 
+    /**
+     * The suite migrates its own copies of the stubs from tests/database. The
+     * Workbench publishes the same schema into the Testbench skeleton's
+     * database/migrations, and pointing the database path here keeps the two
+     * out of the same migration run.
+     */
     protected function defineDatabaseMigrations(): void
     {
-        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+        $this->app?->useDatabasePath(__DIR__ . '/database');
     }
 }
