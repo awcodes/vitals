@@ -13,3 +13,7 @@ arch('no debugging functions are left in source')
 arch('env() is only read from config files')
     ->expect('Awcodes\Vitals')
     ->not->toUse('env');
+
+arch('models are final')
+    ->expect('Awcodes\Vitals\Models')
+    ->toBeFinal();

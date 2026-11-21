@@ -29,8 +29,8 @@ parameters:
         # on a listed path that does not exist, and the `(?)` optional marker works
         # only in excludePaths, not here.
         - workbench
-        # - config
-        # - database
+        - config
+        - database
     excludePaths:
         analyse:
             # workbench/storage is gitignored, but it appears the moment anyone runs
@@ -39,4 +39,11 @@ parameters:
             # without this the config passes in CI and is unusable locally. The `(?)`
             # marks the path optional so this does not itself hard-error in CI.
             - workbench/storage (?)
+    ignoreErrors:
+        # config/vitals.php is the package's config file, merged into the app's
+        # config by the service provider, so env() is read at config-load time as
+        # it should be. Larastan only recognises the app's own config directory.
+        -
+            identifier: larastan.noEnvCallsOutsideOfConfig
+            path: config/vitals.php
     tmpDir: build/phpstan
