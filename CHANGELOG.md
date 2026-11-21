@@ -2,7 +2,7 @@
 
 All notable changes to `awcodes/vitals` are documented in this file.
 
-## Unreleased
+## 0.1.0 - 2026-11-21
 
 - Initial package scaffold: Workbench, agent tooling and CI.
 - Monitoring domain: the `Monitor` model (extending Spatie's), check
