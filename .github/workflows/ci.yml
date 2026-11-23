@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - 1.x
     paths:
       - "src/**"
       - "config/**"
@@ -31,7 +31,7 @@ on:
       - ".github/dependabot.yml"
   pull_request:
     branches:
-      - main
+      - 1.x
     paths:
       - "src/**"
       - "config/**"
