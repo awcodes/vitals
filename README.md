@@ -8,18 +8,15 @@ Website uptime, certificate and incident monitoring for Filament panels, built o
 [![GitHub Repo stars](https://img.shields.io/github/stars/awcodes/vitals?style=flat-square&color=blue&label=Stars)](https://github.com/awcodes/vitals/stargazers)
 [![Filament Version](https://img.shields.io/badge/Filament-4.x%20%26%205.x-d97706.svg?style=flat-square)](https://filamentphp.com/docs/5.x/introduction/installation)
 
-> [!WARNING]
-> Vitals is currently a work in progress. Do not use in production yet. Please report any issues you encounter to help us stabilize the package.
-
 ## Documentation
 
-The full documentation lives at **[docs.aw.codes/vitals](https://docs.aw.codes/vitals/0.x)**.
+The full documentation lives at **[docs.aw.codes/vitals](https://docs.aw.codes/vitals/1.x)**.
 
 ## Compatibility
 
 | Filament version | Package version |
 |------------------|-----------------|
-| 4.x & 5.x        | 0.x             |
+| 4.x & 5.x        | 1.x             |
 
 ## Installation
 
@@ -27,7 +24,7 @@ The full documentation lives at **[docs.aw.codes/vitals](https://docs.aw.codes/v
 composer require awcodes/vitals
 ```
 
-Then run `php artisan vitals:install`, point `config/uptime-monitor.php` at the Vitals classes, register the plugin on your panel, add the package's views to your Tailwind theme and schedule the checks. See [Installation](https://docs.aw.codes/vitals/0.x/installation) for each step.
+Then run `php artisan vitals:install`, point `config/uptime-monitor.php` at the Vitals classes, register the plugin on your panel, add the package's views to your Tailwind theme and schedule the checks. See [Installation](https://docs.aw.codes/vitals/1.x/installation) for each step.
 
 ## Changelog
 

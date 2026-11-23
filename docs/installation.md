@@ -9,7 +9,7 @@ description: Install Vitals, connect it to spatie/laravel-uptime-monitor and reg
 
 | Filament version | Package version |
 |------------------|-----------------|
-| 4.x & 5.x        | 0.x             |
+| 4.x & 5.x        | 1.x             |
 
 Vitals requires PHP 8.3 or later, Laravel 12 or 13, the `intl` extension and `filament/filament`.
 

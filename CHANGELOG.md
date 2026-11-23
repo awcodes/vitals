@@ -2,6 +2,15 @@
 
 All notable changes to `awcodes/vitals` are documented in this file.
 
+## 1.0.0 - 2026-11-23
+
+- First stable release. The public surface — config keys, plugin options,
+  policy abilities, table columns and command names — follows semantic
+  versioning from here.
+- No code changes from 0.1.2. Two applications run it: aw.codes in
+  production, and Relay.
+- `1.x` is now the default branch.
+
 ## 0.1.2 - 2026-11-23
 
 - The migrations' `down()` methods drop nothing. They used to drop the Vitals
