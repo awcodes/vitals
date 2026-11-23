@@ -17,6 +17,12 @@ it('registers nothing on its own', function (): void {
     ))->toBeEmpty();
 });
 
+it('registers on the application schedule when given none', function (): void {
+    Vitals::schedule();
+
+    expect(scheduledEvent(resolve(Schedule::class), 'monitors:prune-history'))->not->toBeNull();
+});
+
 it('schedules the four Vitals commands', function (string $command, string $expression, bool $overlapping, ?int $expiresAfterMinutes): void {
     $schedule = new Schedule;
     Vitals::schedule($schedule);

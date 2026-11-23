@@ -115,9 +115,19 @@ A small stylesheet for table and slide-over spacing is registered as a Filament 
 php artisan filament:assets
 ```
 
+It is published to `public/css/awcodes/vitals/vitals.css`. If your application git-ignores Filament's published assets directory by directory, add `/public/css/awcodes` to `.gitignore` as well.
+
 ## Schedule the checks
 
-Vitals schedules nothing by itself. Register its schedule in `bootstrap/app.php`:
+Vitals schedules nothing by itself. Register its schedule in `routes/console.php`:
+
+```php
+use Awcodes\Vitals\Vitals;
+
+Vitals::schedule();
+```
+
+Or, if your application schedules in `bootstrap/app.php`, pass the `Schedule` that `withSchedule()` gives you:
 
 ```php
 use Awcodes\Vitals\Vitals;

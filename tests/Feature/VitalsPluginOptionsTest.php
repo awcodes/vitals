@@ -9,6 +9,7 @@ use Awcodes\Vitals\VitalsPlugin;
 use Filament\Facades\Filament;
 use Filament\Panel;
 use Filament\Support\Facades\FilamentAsset;
+use Filament\Support\Icons\Heroicon;
 use Workbench\App\Models\User;
 
 function vitalsPanel(VitalsPlugin $plugin): Panel
@@ -42,6 +43,18 @@ it('applies the fluent navigation options', function (): void {
         ->and(VitalsPage::getNavigationIcon())->toBe('heroicon-o-signal')
         ->and(VitalsPage::getNavigationGroup())->toBe('Operations')
         ->and(VitalsPage::getNavigationSort())->toBe(5);
+});
+
+it('accepts an icon enum', function (): void {
+    vitalsPanel(VitalsPlugin::make()->navigationIcon(Heroicon::OutlinedSignal));
+
+    expect(VitalsPage::getNavigationIcon())->toBe(Heroicon::OutlinedSignal);
+});
+
+it('can leave out the navigation icon', function (): void {
+    vitalsPanel(VitalsPlugin::make()->navigationIcon(null));
+
+    expect(VitalsPage::getNavigationIcon())->toBeNull();
 });
 
 it('can leave out the alerts widget', function (): void {

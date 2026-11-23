@@ -47,7 +47,7 @@ $panel->plugin(
 ```
 
 - `navigationLabel()` sets both the navigation item and the page title.
-- `navigationIcon()` accepts any Blade icon name. The default, `vitals-heartbeat`, ships with the package.
+- `navigationIcon()` accepts any Blade icon name or an icon enum such as `Heroicon::OutlinedSignal`. The default, `vitals-heartbeat`, ships with the package. Pass `null` for no icon, for a panel whose navigation carries none.
 - `navigationGroup()` accepts a string or an enum.
 - `slug()` sets the page's URL segment.
 - `timezone()` overrides `vitals.timezone` for this panel.
