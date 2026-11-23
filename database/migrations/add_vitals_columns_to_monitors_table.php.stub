@@ -13,9 +13,6 @@ use Illuminate\Support\Facades\Schema;
  */
 return new class extends Migration
 {
-    /** @var list<string> */
-    private array $columns = ['name', 'server_url', 'paused_at', 'paused_until', 'pause_reason'];
-
     public function up(): void
     {
         Schema::table('monitors', function (Blueprint $table): void {
@@ -41,16 +38,11 @@ return new class extends Migration
         });
     }
 
-    public function down(): void
-    {
-        $existing = array_values(array_filter($this->columns, fn (string $column): bool => Schema::hasColumn('monitors', $column)));
-
-        if ($existing === []) {
-            return;
-        }
-
-        Schema::table('monitors', function (Blueprint $table) use ($existing): void {
-            $table->dropColumn($existing);
-        });
-    }
+    /**
+     * Deliberately drops nothing. up() skips tables and columns an app
+     * already had, and a rollback can't tell those apart from ones this
+     * migration created, so dropping here could delete an adopting app's
+     * monitoring history. Remove the tables yourself to uninstall.
+     */
+    public function down(): void {}
 };

@@ -43,6 +43,8 @@ php artisan migrate
 
 Every Vitals migration skips a table or column that already exists, so running the install command again, or installing into an application that already has some of these tables, is safe. See [Upgrading](upgrading.md) if you are moving from a monitoring page of your own.
 
+Rolling the Vitals migrations back drops nothing. A rollback cannot tell tables and columns your application already had from ones Vitals created, so it leaves them all, with their data. To remove Vitals entirely, drop the three history tables and the columns yourself.
+
 ## Point Spatie at Vitals
 
 Vitals never edits `config/uptime-monitor.php`, so set these keys yourself. The install command prints them as a reminder.
