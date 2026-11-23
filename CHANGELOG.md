@@ -2,6 +2,18 @@
 
 All notable changes to `awcodes/vitals` are documented in this file.
 
+## 0.1.1 - 2026-11-23
+
+From adopting Vitals in a second application:
+
+- `VitalsPlugin::navigationIcon()` accepts an icon enum, or `null` to show no
+  icon in a panel whose navigation carries none.
+- `Vitals::schedule()` takes the `Schedule` as optional, so `routes/console.php`
+  can call `Vitals::schedule()` without resolving one.
+- Docs: scheduling from `routes/console.php`, where the stylesheet is published,
+  and how the recommended notification setting changes what an adopting team
+  receives.
+
 ## 0.1.0 - 2026-11-21
 
 - Initial package scaffold: Workbench, agent tooling and CI.

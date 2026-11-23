@@ -11,6 +11,15 @@ Vitals never adds anything to your scheduler on its own. Your application decide
 
 ```php
 use Awcodes\Vitals\Vitals;
+
+// routes/console.php
+Vitals::schedule();
+```
+
+Called with no argument, it registers on the application's schedule. In `bootstrap/app.php`, pass the `Schedule` that `withSchedule()` provides:
+
+```php
+use Awcodes\Vitals\Vitals;
 use Illuminate\Console\Scheduling\Schedule;
 
 // bootstrap/app.php

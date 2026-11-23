@@ -13,6 +13,7 @@ use Awcodes\Vitals\Support\PublicHost;
 use Awcodes\Vitals\Support\UptimeHistory;
 use Awcodes\Vitals\Vitals;
 use Awcodes\Vitals\VitalsPlugin;
+use BackedEnum;
 use Carbon\CarbonImmutable;
 use Closure;
 use Filament\Actions\Action;
@@ -83,9 +84,11 @@ final class VitalsPage extends Page implements HasActions, HasSchemas, HasTable
         return VitalsPlugin::current()?->getNavigationLabel() ?? 'Vitals';
     }
 
-    public static function getNavigationIcon(): string
+    public static function getNavigationIcon(): string | BackedEnum | null
     {
-        return VitalsPlugin::current()?->getNavigationIcon() ?? 'vitals-heartbeat';
+        $plugin = VitalsPlugin::current();
+
+        return $plugin instanceof VitalsPlugin ? $plugin->getNavigationIcon() : 'vitals-heartbeat';
     }
 
     public static function getNavigationGroup(): string | UnitEnum | null

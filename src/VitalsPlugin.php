@@ -6,6 +6,7 @@ namespace Awcodes\Vitals;
 
 use Awcodes\Vitals\Filament\Pages\VitalsPage;
 use Awcodes\Vitals\Filament\Widgets\VitalsAlertsWidget;
+use BackedEnum;
 use Filament\Contracts\Plugin;
 use Filament\Facades\Filament;
 use Filament\Panel;
@@ -18,7 +19,7 @@ class VitalsPlugin implements Plugin
 
     protected string $navigationLabel = 'Vitals';
 
-    protected string $navigationIcon = 'vitals-heartbeat';
+    protected string | BackedEnum | null $navigationIcon = 'vitals-heartbeat';
 
     protected string | UnitEnum | null $navigationGroup = null;
 
@@ -86,7 +87,11 @@ class VitalsPlugin implements Plugin
         return $this;
     }
 
-    public function navigationIcon(string $icon): static
+    /**
+     * A Blade icon name or an icon enum such as Heroicon. Null shows no
+     * icon, for panels whose navigation carries none.
+     */
+    public function navigationIcon(string | BackedEnum | null $icon): static
     {
         $this->navigationIcon = $icon;
 
@@ -136,7 +141,7 @@ class VitalsPlugin implements Plugin
         return $this->navigationLabel;
     }
 
-    public function getNavigationIcon(): string
+    public function getNavigationIcon(): string | BackedEnum | null
     {
         return $this->navigationIcon;
     }
