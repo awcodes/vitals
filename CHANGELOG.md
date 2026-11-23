@@ -2,6 +2,14 @@
 
 All notable changes to `awcodes/vitals` are documented in this file.
 
+## 0.1.2 - 2026-11-23
+
+- The migrations' `down()` methods drop nothing. They used to drop the Vitals
+  tables and columns even when the application already had them, so a
+  rollback could delete an adopting application's monitoring history.
+  Applications on 0.1.0 or 0.1.1 should empty `down()` in their published
+  copies; see Upgrading.
+
 ## 0.1.1 - 2026-11-23
 
 From adopting Vitals in a second application:

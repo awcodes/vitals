@@ -5,6 +5,16 @@ description: Move an application with its own spatie/laravel-uptime-monitor page
 
 # Upgrading
 
+## From 0.1.0 or 0.1.1
+
+Before 0.1.2, the published migrations' `down()` methods dropped the Vitals tables and columns even when your application already had them, so rolling back their batch could delete monitoring history, and monitor names in an application that had `name` before Vitals. Published migrations are yours and are not updated by `composer update`, so make the `down()` method of each of the four Vitals migrations in `database/migrations` empty:
+
+```php
+public function down(): void {}
+```
+
+Nothing else changes, and there is nothing to migrate.
+
 ## From a custom monitoring page
 
 Applications that already run `spatie/laravel-uptime-monitor` usually have a `monitors` table, a `Monitor` model of their own and a page or widget that lists monitors. Vitals is designed to take over from those without losing data.

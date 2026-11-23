@@ -31,8 +31,11 @@ return new class extends Migration
         });
     }
 
-    public function down(): void
-    {
-        Schema::dropIfExists('monitor_incidents');
-    }
+    /**
+     * Deliberately drops nothing. up() skips tables and columns an app
+     * already had, and a rollback can't tell those apart from ones this
+     * migration created, so dropping here could delete an adopting app's
+     * monitoring history. Remove the tables yourself to uninstall.
+     */
+    public function down(): void {}
 };
